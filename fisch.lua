@@ -1,8 +1,8 @@
 -- Load the new UI library from the provided URL
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/DemonHubTop/who/refs/heads/main/ui.lua"))()
 
--- Create the main window using the new library
-local window = library:CreateWindow("FISCH AUTO FARM")
+-- Create the main window using the new UI library
+local window = library:CreateWindow("FISCH AUTO FARM")  -- Assuming 'CreateWindow' is how the new library initializes windows
 
 local Players = game:GetService('Players')
 local CoreGui = game:GetService('StarterGui')
@@ -159,8 +159,8 @@ end
 
 -- Create Auto Shake Button in the GUI using the new UI library
 window:Button("Toggle Auto Shake", function()
-    -- Bind Auto Shake action to the button
-    ToggleAutoShake()  -- Trigger the toggle when button is pressed
+    -- Trigger the toggle when the button is pressed
+    ToggleAutoShake()  
 end)
 
 -- Labels and instructions
