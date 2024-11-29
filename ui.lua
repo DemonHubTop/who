@@ -8,6 +8,18 @@ local VerifyButton = Instance.new("TextButton")
 local GetKeyButton = Instance.new("TextButton")
 local JoinDiscordButton = Instance.new("TextButton")
 
+-- Ensure this script runs only in LocalScript
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui", 5)
+
+if not playerGui then
+    error("PlayerGui not found. Ensure this is running as a LocalScript.")
+end
+
+-- ScreenGui Properties
+ScreenGui.Parent = playerGui
+ScreenGui.Name = "KeySystemGUI"
+
 -- Dragging functionality
 local UIS = game:GetService("UserInputService")
 local dragging, dragInput, dragStart, startPos
@@ -42,10 +54,6 @@ UIS.InputChanged:Connect(function(input)
         )
     end
 end)
-
--- ScreenGui Properties
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.Name = "KeySystemGUI"
 
 -- Frame Properties
 Frame.Parent = ScreenGui
@@ -142,52 +150,32 @@ JoinDiscordButton.Font = Enum.Font.SourceSans
 JoinDiscordButton.TextSize = 16
 animateButton(JoinDiscordButton)
 
--- GetKeyButton functionality
+-- Clipboard and key functions
+local HttpService = game:GetService("HttpService")
+local permanentKeys = { "Yq7v&nxl9Nhsx", "StarX Is Crazy" }
+local dynamicKeyUrl = "https://pastebin.com/raw/DyLxXSPc"
+
+local function fetchDynamicKey()
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(game:HttpGet(dynamicKeyUrl))
+    end)
+    return success and result.Key or nil
+end
+
 GetKeyButton.MouseButton1Click:Connect(function()
     local keyUrl = "https://key-home.vercel.app/"
     if setclipboard then
         setclipboard(keyUrl)
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Clipboard",
-            Text = "URL copied to clipboard.",
-            Icon = ""
-        })
+        game.StarterGui:SetCore("SendNotification", { Title = "Clipboard", Text = "URL copied to clipboard.", Icon = "" })
     else
         warn("Clipboard API not supported!")
     end
 end)
 
-local HttpService = game:GetService("HttpService")
-
--- Permanent keys
-local permanentKeys = {
-    "Yq7v&nxl9Nhsx",
-    "StarX Is Crazy",
-}
-
--- Dynamic key URL
-local dynamicKeyUrl = "https://pastebin.com/raw/DyLxXSPc"
-
--- Fetch dynamic key
-local function fetchDynamicKey()
-    local success, result = pcall(function()
-        return HttpService:JSONDecode(game:HttpGet(dynamicKeyUrl))
-    end)
-
-    if success and result.Key then
-        return result.Key
-    else
-        warn("Failed to fetch dynamic key from server:", result)
-        return nil
-    end
-end
-
--- Verify key functionality
 VerifyButton.MouseButton1Click:Connect(function()
     local inputKey = KeyInput.Text
     local isValid = false
 
-    -- Check permanent keys
     for _, key in ipairs(permanentKeys) do
         if inputKey == key then
             isValid = true
@@ -195,7 +183,6 @@ VerifyButton.MouseButton1Click:Connect(function()
         end
     end
 
-    -- Check dynamic key
     if not isValid then
         local dynamicKey = fetchDynamicKey()
         if dynamicKey and inputKey == dynamicKey then
@@ -203,7 +190,6 @@ VerifyButton.MouseButton1Click:Connect(function()
         end
     end
 
-    -- Handle result
     if isValid then
         ScreenGui:Destroy()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Kraker-g/Scripts/refs/heads/main/Blade-Ball"))()
@@ -213,16 +199,11 @@ VerifyButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- JoinDiscordButton functionality
 JoinDiscordButton.MouseButton1Click:Connect(function()
     local discordUrl = "https://discord.gg/EwARkGncq4"
     if setclipboard then
         setclipboard(discordUrl)
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Join Discord",
-            Text = "Discord URL copied to clipboard!",
-            Icon = ""
-        })
+        game.StarterGui:SetCore("SendNotification", { Title = "Join Discord", Text = "Discord URL copied to clipboard!", Icon = "" })
     else
         warn("Clipboard API not supported!")
     end
