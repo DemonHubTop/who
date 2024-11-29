@@ -2,7 +2,7 @@
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/DemonHubTop/who/refs/heads/main/ui.lua"))()
 
 -- Create the main window using the new UI library
-local window = library:CreateWindow("FISCH AUTO FARM")  -- Assuming 'CreateWindow' is how the new library initializes windows
+local window = library:CreateWindow("FISCH AUTO FARM")
 
 local Players = game:GetService('Players')
 local CoreGui = game:GetService('StarterGui')
@@ -18,7 +18,8 @@ local Enabled = false
 local Rod = nil
 local Progress = false
 local Finished = false
-local AutoShakeEnabled = false  -- New variable for auto shake state
+local AutoShakeEnabled = false  -- Auto shake enabled flag
+local AutoReelEnabled = false  -- Auto reel enabled flag
 local LoopPosition
 
 local Keybind = Enum.KeyCode.X
@@ -59,21 +60,36 @@ function ToggleAutoShake(Name, State, Input)
     end
 end
 
--- Add auto shake functionality
+-- Add Auto Shake functionality: Shakes the rod when enabled
 function AutoShakeRod()
     if AutoShakeEnabled and Rod then
-        -- Assuming Rod has a shake event or action, replace with correct event for shaking
-        Rod.events.shake:FireServer()  -- Replace this with actual shake event if necessary
+        -- Assuming Rod has a shake event or method, this should be replaced by actual shake functionality
+        Rod.events.shake:FireServer()  -- Replace this with the correct shake action if necessary
+        ShowNotification("Auto Shake Activated!")
     end
 end
 
--- Spawn a task to run auto shake when enabled
+-- Auto Reel functionality: Reels in when conditions are met
+function AutoReelRod()
+    if AutoReelEnabled and Rod then
+        -- Assuming Rod has a reel event or method, this should be replaced by actual reel functionality
+        Rod.events.reel:FireServer()  -- Replace this with the correct reel action if necessary
+        ShowNotification("Auto Reel Activated!")
+    end
+end
+
+-- Spawn a task to continuously check for Auto Shake and Auto Reel
 task.spawn(function()
     while true do
         if AutoShakeEnabled then
-            AutoShakeRod()  -- Trigger shake action
+            AutoShakeRod()  -- Trigger Auto Shake action
         end
-        task.wait(0.5)  -- Adjust the interval for shaking as needed
+        
+        if AutoReelEnabled then
+            AutoReelRod()  -- Trigger Auto Reel action
+        end
+
+        task.wait(1)  -- Adjust interval based on the game's needs
     end
 end)
 
@@ -163,9 +179,17 @@ window:Button("Toggle Auto Shake", function()
     ToggleAutoShake()  
 end)
 
+-- Create Auto Reel Button in the GUI using the new UI library
+window:Button("Toggle Auto Reel", function()
+    -- Trigger the toggle when the button is pressed
+    AutoReelEnabled = not AutoReelEnabled
+    ShowNotification("Auto Reel: " .. (AutoReelEnabled and "Enabled" or "Disabled"))
+end)
+
 -- Labels and instructions
 window:Label("X - ON/OFF", Color3.fromRGB(127, 143, 166))
 window:Label("Hold Rod to Auto Farm", Color3.fromRGB(127, 143, 166))
 window:Label("Press the button to toggle Auto Shake", Color3.fromRGB(127, 143, 166))
+window:Label("Press the button to toggle Auto Reel", Color3.fromRGB(127, 143, 166))
 
-window:Label("RBLXSCRIPTS.NET", Color3.fromRGB(327, 343, 366))
+window:Label("DemonHub", Color3.fromRGB(327, 343, 366))
