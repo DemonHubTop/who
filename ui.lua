@@ -11,6 +11,7 @@ local JoinDiscordButton = Instance.new("TextButton")
 -- Dragging functionality
 local UIS = game:GetService("UserInputService")
 local dragging, dragInput, dragStart, startPos
+
 Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
@@ -33,7 +34,12 @@ end)
 UIS.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         local delta = input.Position - dragStart
-        Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        Frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
     end
 end)
 
@@ -73,10 +79,9 @@ Title.TextSize = 20
 
 -- Description Properties
 Description.Parent = Frame
-Description.Text = "Have Problem With Key? Join Our Discord!"
+Description.Text = "Having issues with your key? Join our Discord!"
 Description.TextColor3 = Color3.fromRGB(200, 200, 200)
-Description.Size = UDim2
-.new(1, -20, 0, 50)
+Description.Size = UDim2.new(1, -20, 0, 50)
 Description.Position = UDim2.new(0, 10, 0, 35)
 Description.BackgroundTransparency = 1
 Description.Font = Enum.Font.SourceSans
@@ -85,7 +90,7 @@ Description.TextWrapped = true
 
 -- KeyInput Properties
 KeyInput.Parent = Frame
-KeyInput.PlaceholderText = "Put Key Here...."
+KeyInput.PlaceholderText = "Enter your key here..."
 KeyInput.Text = ""
 KeyInput.Size = UDim2.new(1, -20, 0, 30)
 KeyInput.Position = UDim2.new(0, 10, 0, 90)
@@ -94,7 +99,7 @@ KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.Font = Enum.Font.SourceSans
 KeyInput.TextSize = 16
 
--- Button Properties with hover effect
+-- Button hover effect
 local function animateButton(button)
     button.MouseEnter:Connect(function()
         button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
@@ -106,7 +111,7 @@ end
 
 -- VerifyButton Properties
 VerifyButton.Parent = Frame
-VerifyButton.Text = "Check Key"
+VerifyButton.Text = "Verify Key"
 VerifyButton.Size = UDim2.new(0.5, -15, 0, 30)
 VerifyButton.Position = UDim2.new(0, 10, 0, 130)
 VerifyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -137,18 +142,18 @@ JoinDiscordButton.Font = Enum.Font.SourceSans
 JoinDiscordButton.TextSize = 16
 animateButton(JoinDiscordButton)
 
--- "Get Key" button functionality
+-- GetKeyButton functionality
 GetKeyButton.MouseButton1Click:Connect(function()
     local keyUrl = "https://key-home.vercel.app/"
     if setclipboard then
         setclipboard(keyUrl)
         game.StarterGui:SetCore("SendNotification", {
             Title = "Clipboard",
-            Text = "URL Has Copied To Your Clipboard",
+            Text = "URL copied to clipboard.",
             Icon = ""
         })
     else
-        warn("Clipboard API Not Supported!")
+        warn("Clipboard API not supported!")
     end
 end)
 
@@ -163,64 +168,62 @@ local permanentKeys = {
 -- Dynamic key URL
 local dynamicKeyUrl = "https://pastebin.com/raw/DyLxXSPc"
 
--- Function to fetch dynamic key
+-- Fetch dynamic key
 local function fetchDynamicKey()
     local success, result = pcall(function()
         return HttpService:JSONDecode(game:HttpGet(dynamicKeyUrl))
     end)
 
-    if success then
-        return result.Key -- Ensure Pastebin returns JSON like: { "Key": "DynamicKey123" }
+    if success and result.Key then
+        return result.Key
     else
-        warn("Failed to fetch dynamic key from Pastebin:", result)
+        warn("Failed to fetch dynamic key from server:", result)
         return nil
     end
 end
 
--- Key verification functionality
+-- Verify key functionality
 VerifyButton.MouseButton1Click:Connect(function()
     local inputKey = KeyInput.Text
-    local isPermanentKey = false
-    local isDynamicKey = false
+    local isValid = false
 
-    -- Check if inputKey is a permanent key
-    for _, validKey in ipairs(permanentKeys) do
-        if inputKey == validKey then
-            isPermanentKey = true
+    -- Check permanent keys
+    for _, key in ipairs(permanentKeys) do
+        if inputKey == key then
+            isValid = true
             break
         end
     end
 
-    -- If not a permanent key, check through the dynamic server
-    if not isPermanentKey then
+    -- Check dynamic key
+    if not isValid then
         local dynamicKey = fetchDynamicKey()
         if dynamicKey and inputKey == dynamicKey then
-            isDynamicKey = true
+            isValid = true
         end
     end
 
-    -- Validate results
-    if isPermanentKey or isDynamicKey then
+    -- Handle result
+    if isValid then
         ScreenGui:Destroy()
-        -- Insert script to run after key validation
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Kraker-g/Scripts/refs/heads/main/Blade-Ball"))()
     else
         KeyInput.Text = ""
-        KeyInput.PlaceholderText = "Key is wrong, Copy it Correctly"
+        KeyInput.PlaceholderText = "Invalid key. Try again!"
     end
 end)
 
--- "Join Discord" button functionality
+-- JoinDiscordButton functionality
 JoinDiscordButton.MouseButton1Click:Connect(function()
     local discordUrl = "https://discord.gg/EwARkGncq4"
     if setclipboard then
         setclipboard(discordUrl)
         game.StarterGui:SetCore("SendNotification", {
-            Title = "How to Key",
-            Text = "Join Our Discord!",
+            Title = "Join Discord",
+            Text = "Discord URL copied to clipboard!",
             Icon = ""
         })
     else
-        warn("Clipboard API Not Supported!")
+        warn("Clipboard API not supported!")
     end
 end)
