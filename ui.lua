@@ -3,7 +3,7 @@ local v127 =
     v126:CreateWindow(
     {
         ["Title"] = "DEMONSTAR HUB | FISCHv1.2",
-        ["SubTitle"] = "by Jva & codez",
+        ["SubTitle"] = "by Jova & CodeE4X",
         ["Size"] = UDim2.fromOffset(580, 460),
         ["Acrylic"] = true,
         ["Theme"] = "Dark",
