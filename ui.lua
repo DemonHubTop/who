@@ -122,6 +122,39 @@ local window = library:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl
 })
 
+local homeTab = window:AddTab({Title = "Home", Icon = "rbxassetid://7733960981"})
+
+homeTab:AddButton({
+    Title = "Join our Discord",
+    Description = "Click on this button to copy the invite link!",
+    Callback = function()
+        local inviteLink = "https://discord.gg/25ms"
+        if setclipboard then
+            setclipboard(inviteLink)
+            print("Discord invite link copied to clipboard!")
+        else
+            print("setclipboard function not available.")
+        end
+    end
+})
+
+homeTab:AddParagraph({
+    Title = "About Our Discord",
+    Content = [[
+        DEMONSTAR HUB, the ultimate Roblox exploit hub, now has its very own Discord server! This is your go-to place to stay updated on all the latest features, scripts, and announcements. Here’s what you can do in our server:
+        - Stay Informed: Get real-time updates on the latest developments, script releases, and exploit features available in DEMONSTAR HUB.
+        - Script Requests: Need a specific script? Submit your requests, and our team or community may create one for you.
+        - Exclusive Giveaways: Participate in exciting Robux giveaways exclusively for our Discord members.
+        - Community Interaction: Connect with like-minded exploit enthusiasts, share tips, and get help from a supportive community.
+        - Much More: Enjoy sneak peeks, community events, and future features tailored for DEMONSTAR HUB users.
+    ]]
+})
+
+homeTab:AddParagraph({
+    Title = "Credits",
+    Content = "DEMONSTAR HUB | FISCHv1.2 by hassanxzayn"
+})
+
 local mainTab = window:AddTab({Title = "Main", Icon = "rbxassetid://7733749837"})
 
 mainTab:AddButton({
