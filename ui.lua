@@ -3,7 +3,7 @@ local v127 =
     v126:CreateWindow(
     {
         ["Title"] = "DEMONSTAR HUB | FISCHv1.2",
-        ["SubTitle"] = "by Jova & CodeE4X",
+        ["SubTitle"] = "by hassanxzayn",
         ["Size"] = UDim2.fromOffset(580, 460),
         ["Acrylic"] = true,
         ["Theme"] = "Dark",
@@ -189,11 +189,13 @@ task.spawn(
     end
 )
 
-v152:Button(
-    "Enable/Disable",
-    function()
-        v167()
-    end
+local v152 = v128.Main:AddButton(
+    {
+        ["Title"] = "Enable/Disable",
+        ["Callback"] = function()
+            v167()
+        end
+    }
 )
 
 local v168 = v152:Label("Auto Farm OFF!!", Color3.fromRGB(255, 255, 255))
@@ -214,7 +216,11 @@ task.spawn(
 )
 
 v128.Misc:AddButton(
-    {["Title"] = "Anti AFK", ["Description"] = "Best For Farming", ["Callback"] = function()
+    {
+        ["Title"] = "Anti AFK",
+        ["Description"] = "Best For Farming",
+        ["Callback"] = function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/Anti-afk/main/antiafkbyhassanxzyn"))()
-        end}
+        end
+    }
 )
