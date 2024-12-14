@@ -1,172 +1,220 @@
--- GUI Setup
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
-local Subtitle = Instance.new("TextLabel")
-local TextBox = Instance.new("TextBox")
-local VerifyButton = Instance.new("TextButton")
-local GetKeyButton = Instance.new("TextButton")
-local DiscordButton = Instance.new("TextButton")
-local CreditLabel = Instance.new("TextLabel")
+local v126 = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local v127 =
+    v126:CreateWindow(
+    {
+        ["Title"] = "DEMONSTAR HUB | FISCHv1.2",
+        ["SubTitle"] = "by hassanxzayn",
+        ["Size"] = UDim2.fromOffset(580, 460),
+        ["Acrylic"] = true,
+        ["Theme"] = "Dark",
+        ["MinimizeKey"] = Enum.KeyCode.LeftControl
+    }
+)
 
--- Parent
-ScreenGui.Parent = game.CoreGui
-Frame.Parent = ScreenGui
+local v128 = {
+    ["Main"] = v127:AddTab({["Title"] = "Main", ["Icon"] = "rbxassetid://7733749837"}),
+    ["Settings"] = v127:AddTab({["Title"] = "Settings", ["Icon"] = "settings"})
+}
 
--- Frame Properties
-Frame.Size = UDim2.new(0, 400, 0, 300)
-Frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Frame.BorderSizePixel = 0
+local v129 = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local v130 = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+v129:SetLibrary(v126)
+v130:SetLibrary(v126)
+v130:BuildInterfaceSection(v128.Settings)
+v129:BuildConfigSection(v128.Settings)
+v127:SelectTab(1)
 
--- Title Properties
-Title.Parent = Frame
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.Position = UDim2.new(0, 0, 0, 0)
-Title.Text = "DemonStar!!"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-Title.BorderSizePixel = 0
-Title.TextSize = 20
-Title.Font = Enum.Font.SourceSansBold
-
--- Subtitle Properties
-Subtitle.Parent = Frame
-Subtitle.Size = UDim2.new(1, 0, 0, 20)
-Subtitle.Position = UDim2.new(0, 0, 0, 40)
-Subtitle.Text = "Having issues with your key? Join our Discord!"
-Subtitle.TextColor3 = Color3.fromRGB(180, 180, 180)
-Subtitle.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Subtitle.BorderSizePixel = 0
-Subtitle.TextSize = 14
-Subtitle.Font = Enum.Font.SourceSansItalic
-
--- TextBox Properties
-TextBox.Parent = Frame
-TextBox.Size = UDim2.new(0.9, 0, 0, 30)
-TextBox.Position = UDim2.new(0.05, 0, 0, 70)
-TextBox.PlaceholderText = "Enter your key here..."
-TextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.BorderSizePixel = 0
-TextBox.TextSize = 16
-TextBox.Font = Enum.Font.SourceSans
-
--- Verify Button Properties
-VerifyButton.Parent = Frame
-VerifyButton.Size = UDim2.new(0.45, 0, 0, 30)
-VerifyButton.Position = UDim2.new(0.05, 0, 0, 110)
-VerifyButton.Text = "Check Key"
-VerifyButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-VerifyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-VerifyButton.BorderSizePixel = 0
-VerifyButton.TextSize = 16
-VerifyButton.Font = Enum.Font.SourceSansBold
-
--- Get Key Button Properties
-GetKeyButton.Parent = Frame
-GetKeyButton.Size = UDim2.new(0.45, 0, 0, 30)
-GetKeyButton.Position = UDim2.new(0.5, 0, 0, 110)
-GetKeyButton.Text = "Get Key"
-GetKeyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-GetKeyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-GetKeyButton.BorderSizePixel = 0
-GetKeyButton.TextSize = 16
-GetKeyButton.Font = Enum.Font.SourceSansBold
-
--- Discord Button Properties
-DiscordButton.Parent = Frame
-DiscordButton.Size = UDim2.new(0.9, 0, 0, 30)
-DiscordButton.Position = UDim2.new(0.05, 0, 0, 150)
-DiscordButton.Text = "Join Discord"
-DiscordButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-DiscordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-DiscordButton.BorderSizePixel = 0
-DiscordButton.TextSize = 16
-DiscordButton.Font = Enum.Font.SourceSansBold
-
--- Credit Label Properties
-CreditLabel.Parent = Frame
-CreditLabel.Size = UDim2.new(1, 0, 0, 20)
-CreditLabel.Position = UDim2.new(0, 0, 1, -20)
-CreditLabel.Text = "Made by burnurpizza_96 | Jova3435"
-CreditLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
-CreditLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-CreditLabel.BorderSizePixel = 0
-CreditLabel.TextSize = 14
-CreditLabel.Font = Enum.Font.SourceSansItalic
-
--- Script Logic
-local function verifyKey(key)
-    local url = "http://thor.pylex.software:10663/check?key=" .. key
-    local success, response = pcall(function()
-        return game:HttpGet(url)
-    end)
-
-    if success then
-        print("Server response: " .. response)
-        local successDecode, data = pcall(function()
-            return game.HttpService:JSONDecode(response)
-        end)
-
-        if successDecode then
-            print("Decoded JSON: " .. tostring(data))
-            return data.key == "correct"
-        else
-            warn("Failed to decode JSON: " .. tostring(data))
-            return nil
+v128.Main:AddButton(
+    {
+        ["Title"] = "Sell Holding Fish",
+        ["Description"] = "Sold Fish That Is In Your Hand",
+        ["Callback"] = function()
+            Workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild(
+                "merchant"
+            ):WaitForChild("sell"):InvokeServer()
         end
+    }
+)
+
+v128.Main:AddButton(
+    {
+        ["Title"] = "Sell All Fishes",
+        ["Description"] = "Sold All Fishes That Are In Your Inventory",
+        ["Callback"] = function()
+            Workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild(
+                "merchant"
+            ):WaitForChild("sellall"):InvokeServer()
+        end
+    }
+)
+
+v128.Main:AddButton(
+    {
+        ["Title"] = "Appraise Fish",
+        ["Description"] = "Appraise the fish in your inventory.",
+        ["Callback"] = function()
+            Workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Appraiser"):WaitForChild("appraiser"):WaitForChild(
+                "appraise"
+            ):InvokeServer()
+        end
+    }
+)
+
+local function v167()
+    v160 = not v160
+    if v160 then
+        v164 = v159.Character.HumanoidRootPart.Position
+        v166("Auto Farm ON!!", 1.5)
+        task.spawn(
+            function()
+                while v160 do
+                    if v161 then
+                        v161.events.shake:FireServer()
+                        print("Shaking rod...")
+                    end
+                    task.wait(0.1)
+                end
+            end
+        )
     else
-        warn("Failed to contact server: " .. tostring(response))
-        return nil
+        v163 = false
+        v162 = false
+        v166("Auto Farm: Disabled", 1.5)
+        v155.SelectedObject = nil
+        if v161 then
+            v161.events.reset:FireServer()
+        end
     end
 end
 
-VerifyButton.MouseButton1Click:Connect(function()
-    local userKey = TextBox.Text
-    if userKey == "" then
-        Subtitle.Text = "Key cannot be empty!"
-        Subtitle.TextColor3 = Color3.fromRGB(255, 85, 85)
-        return
-    end
+local v153 = game:GetService("Players")
+local v154 = game:GetService("StarterGui")
+local v155 = game:GetService("GuiService")
+local v156 = game:GetService("ReplicatedStorage")
+local v157 = game:GetService("VirtualInputManager")
+local v158 = game:GetService("UserInputService")
+local v159 = v153.LocalPlayer
+local v160 = false
+local v161 = nil
+local v162 = false
+local v163 = false
+local v164
+local v165 = 0
 
-    Subtitle.Text = "Verifying..."
-    Subtitle.TextColor3 = Color3.fromRGB(180, 180, 180)
+local function v166(v236, v237)
+    v154:SetCore(
+        "SendNotification",
+        {
+            ["Title"] = "DEMONSTAR HUB",
+            ["Text"] = v236,
+            ["Duration"] = v237 or 0.5,
+            ["Button1Text"] = "Okay"
+        }
+    )
+end
 
-    local isValid = verifyKey(userKey)
-
-    if isValid == nil then
-        Subtitle.Text = "Failed to contact server. Try again later."
-        Subtitle.TextColor3 = Color3.fromRGB(255, 85, 85)
-    elseif isValid then
-        Subtitle.Text = "Key is valid! Loading script..."
-        Subtitle.TextColor3 = Color3.fromRGB(85, 255, 85)
-        wait(1)
-        local success, err = pcall(function()
-            ScreenGui:Destroy()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Kraker-g/Scripts/refs/heads/main/Blade-Ball"))() -- Replace with your script
-        end)
-        if not success then
-            warn("Error loading script: " .. tostring(err))
-            Subtitle.Text = "Error loading script. Check the script URL."
-            Subtitle.TextColor3 = Color3.fromRGB(255, 85, 85)
+v159.Character.ChildAdded:Connect(
+    function(v240)
+        if (v240:IsA("Tool") and v240.Name:lower():find("rod")) then
+            v161 = v240
         end
-    else
-        Subtitle.Text = "Invalid key! Please try again."
-        Subtitle.TextColor3 = Color3.fromRGB(255, 85, 85)
     end
-end)
+)
 
-GetKeyButton.MouseButton1Click:Connect(function()
-    Subtitle.Text = "Opening key website..."
-    Subtitle.TextColor3 = Color3.fromRGB(180, 180, 180)
-    wait(0.5)
-    setclipboard("http://thor.pylex.software:10663/getkey") -- Copy key website to clipboard
-end)
+v159.Character.ChildRemoved:Connect(
+    function(v241)
+        if (v241 == v161) then
+            v160 = false
+            v163 = false
+            v162 = false
+            v161 = nil
+            v155.SelectedObject = nil
+        end
+    end
+)
 
-DiscordButton.MouseButton1Click:Connect(function()
-    Subtitle.Text = "Opening Discord invite..."
-    Subtitle.TextColor3 = Color3.fromRGB(180, 180, 180)
-    wait(0.5)
-    setclipboard("https://discord.gg/") -- Copy Discord invite link to clipboard
-end)
+v159.PlayerGui.DescendantAdded:Connect(
+    function(v242)
+        if v160 then
+            if ((v242.Name == "button") and (v242.Parent.Name == "safezone")) then
+                task.wait(0.3)
+                v155.SelectedObject = v242
+                v157:SendKeyEvent(true, Enum.KeyCode.Return, false, game)
+                v157:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
+                task.wait(0.1)
+                v155.SelectedObject = nil
+            elseif ((v242.Name == "playerbar") and (v242.Parent.Name == "bar")) then
+                v163 = true
+                v242:GetPropertyChangedSignal("Position"):Wait()
+                v156.events.reelfinished:FireServer(100, true)
+                v165 = v165 + 1
+            end
+        end
+    end
+)
+
+v159.PlayerGui.DescendantRemoving:Connect(
+    function(v243)
+        if (v243.Name == "reel") then
+            v163 = false
+            v162 = false
+        end
+    end
+)
+
+task.spawn(
+    function()
+        while true do
+            if v160 and not v162 then
+                if v161 then
+                    v162 = true
+                    task.wait(0.5)
+                    v161.events.reset:FireServer()
+                    v161.events.cast:FireServer(100)
+                end
+            end
+            task.wait()
+        end
+    end
+)
+
+task.spawn(
+    function()
+        while true do
+            if v160 then
+                v159.Character.HumanoidRootPart.Position = v164
+            end
+            task.wait(0.75)
+        end
+    end
+)
+
+v152:Button(
+    "Enable/Disable",
+    function()
+        v167()
+    end
+)
+
+local v168 = v152:Label("Auto Farm OFF!!", Color3.fromRGB(255, 255, 255))
+local v169 = v152:Label("Catches: 0", Color3.fromRGB(255, 255, 255))
+
+task.spawn(
+    function()
+        while true do
+            task.wait(1)
+            if v160 then
+                v168.Text = "Auto Farm ON!!"
+            else
+                v168.Text = "Auto Farm OFF!!"
+            end
+            v169.Text = "Fishes Catches: " .. v165
+        end
+    end
+)
+
+v128.Misc:AddButton(
+    {["Title"] = "Anti AFK", ["Description"] = "Best For Farming", ["Callback"] = function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/Anti-afk/main/antiafkbyhassanxzyn"))()
+        end}
+)
