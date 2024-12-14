@@ -3,7 +3,6 @@ local StarterGui = game:GetService("StarterGui")
 local GuiService = game:GetService("GuiService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
 local localPlayer = Players.LocalPlayer
@@ -76,7 +75,7 @@ localPlayer.PlayerGui.DescendantAdded:Connect(function(descendant)
         elseif descendant.Name == "playerbar" and descendant.Parent.Name == "bar" then
             isReeling = true
             descendant:GetPropertyChangedSignal("Position"):Wait()
-            ReplicatedStorage.events.reelfinished:FireServer(100, true)
+            ReplicatedStorage:WaitForChild("events"):WaitForChild("reelfinished"):FireServer(100, true)
             fishCount = fishCount + 1
         end
     end
